@@ -6,3 +6,38 @@ class AdvUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+class Category(models.Model):
+    category_name = models.CharField(max_length=100, blank=False, unique=True)
+    def __str__(self):
+        return self.category_name
+
+    class Meta:
+        verbose_name = 'Категорию'
+        verbose_name_plural = 'Категории'
+
+class Application(models.Model):
+    app_name = models.CharField(max_length=100, blank=False, verbose_name='Название заявки')
+    app_description = models.TextField(blank=False, verbose_name='Описание заявки')
+    app_category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, verbose_name='Категория заявки')
+    app_date_created = models.DateTimeField(auto_now_add=True)
+    app_image = models.ImageField(upload_to='app_images/', blank=False, verbose_name='Фото помещения или его план')
+    app_publisher = models.ForeignKey(AdvUser, on_delete=models.SET_NULL, blank=False, null=True, related_name='applications_published')
+
+    design_image = models.ImageField(upload_to='design_images/', null=True, blank=True)
+    design_publisher = models.ForeignKey(AdvUser, on_delete=models.SET_NULL, null=True, blank=False, related_name='applications_designs')
+
+    APP_STATUS = (
+        ('n', 'New'),
+        ('a', 'Accepted in work'),
+        ('d', 'Done'),
+    )
+    status = models.CharField(max_length=1, choices=APP_STATUS, blank=False, default='n')
+    comment = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = 'Заявку'
+        verbose_name_plural = 'Заявки'
+
+    def __str__(self):
+        return self.app_name

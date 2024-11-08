@@ -1,0 +1,10 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Редактирование профиля</title>{% endblock %}
+{% block content %}
+    <form action="{% url 'edit_profile' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Применить изменения</button>
+    </form>
+    <a type="button" href="{% url 'password_change' %}">Изменить пароль</a>
+{% endblock %}

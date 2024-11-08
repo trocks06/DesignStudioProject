@@ -11,6 +11,9 @@
         {% block header %}
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}">Выйти</a>
+                <a href="{% url 'create_application' %}">Создать заявку</a>
+                <a href="#">Мои заявки</a>
+                <a href="{% url 'profile' %}">Личный кабинет</a>
             {% else %}
                 <a href="{% url 'index' %}">Главная</a>
                 <a href="{% url 'login' %}">Вход</a>

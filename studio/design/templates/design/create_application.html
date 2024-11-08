@@ -1,0 +1,9 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Создание заявки</title>{% endblock %}
+{% block content %}
+    <form action="{% url 'create_application' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Создать</button>
+    </form>
+{% endblock %}

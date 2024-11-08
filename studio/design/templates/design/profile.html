@@ -1,0 +1,15 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Личный кабинет</title>{% endblock %}
+{% block content %}
+    <h1>Личный кабинет пользователя "{{ user.username }}"</h1>
+    <ul>
+        <li><strong>Имя:</strong> {{ user.first_name }}</li>
+        <li><strong>Фамилия:</strong> {{ user.last_name }}</li>
+        <li><strong>Отчество:</strong> {{ user.patronymic }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Дата регистрации:</strong> {{ user.date_joined }}</li>
+        <li><strong>Последнее изменение:</strong> {{ user.last_login }}</li>
+    </ul>
+    <a type="button" href="{% url 'edit_profile' %}">Редактировать профиль</a>
+    <a type="button" href="{% url 'delete_profile' %}">Удалить профиль</a>
+{% endblock %}
