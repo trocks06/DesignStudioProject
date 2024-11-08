@@ -1,0 +1,9 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Регистрация</title>{% endblock %}
+{% block content %}
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+{% endblock %}

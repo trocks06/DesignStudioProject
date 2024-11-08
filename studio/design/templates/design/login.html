@@ -1,0 +1,9 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Вход</title>{% endblock %}
+{% block content %}
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Войти</button>
+    </form>
+{% endblock %}
