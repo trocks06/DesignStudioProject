@@ -25,6 +25,12 @@ class UserRegisterForm(UserCreationForm):
             raise forms.ValidationError('Пользователь с таким ником уже существует')
         return username
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if AdvUser.objects.filter(email=email).exists():
+            raise forms.ValidationError('Пользователь с такой почтой уже существует')
+        return email
+
     agree_to_terms = forms.BooleanField(
         label='Я согласен с обработкой персональных данных',
         required=True,
