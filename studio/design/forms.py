@@ -93,10 +93,12 @@ class ApplicationCreateForm(forms.ModelForm):
             try:
                 img = Image.open(app_image)
                 img_format = img.format
-                if img_format not in format_validator:
+                if img_format.upper() not in format_validator:
                     raise forms.ValidationError('Неверный формат файла. Допустимые форматы: JPEG, JPG, PNG, BMP.')
             except Exception:
                 raise forms.ValidationError('Не удалось открыть файл как изображение')
+        return app_image
+
     class Meta:
         model = Application
         fields = ['app_name', 'app_description', 'app_category', 'app_image']

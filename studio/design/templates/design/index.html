@@ -2,6 +2,7 @@
 {% block title %}<title>Главная</title>{% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
+        <p>Кол-во принятых в работу заявок: {{ accepted_count }}</p>
         {% if applications_list %}
             <h1>Выполненные заявки</h1>
             <ul>

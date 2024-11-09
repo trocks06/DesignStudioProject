@@ -1,7 +1,9 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, LoginView
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
@@ -11,13 +13,17 @@ from django.views.generic import DetailView, ListView
 from .forms import UserLoginForm, UserRegisterForm, UserEditForm, ApplicationCreateForm
 from .models import Application
 
-
 class IndexView(ListView):
     template_name = 'design/index.html'
     context_object_name = 'applications_list'
 
     def get_queryset(self):
         return Application.objects.filter(status='d').order_by('-app_date_created')[:4]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['accepted_count'] = Application.objects.filter(status='a').count()
+        return context
 
 def login(request):
     if request.method == 'POST':
@@ -95,7 +101,9 @@ def create_application(request):
     if request.method == 'POST':
         form = ApplicationCreateForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            form.save()
+            application = form.save(commit=False)
+            application.app_publisher = request.user
+            application.save()
             return redirect('index')
         else:
             print(form.errors)
@@ -122,3 +130,10 @@ def delete_application(request, pk):
         return redirect('index')
     else:
         return render(request, 'design/delete_application.html', {'app': app})
+
+class CustomApplicationsView(LoginRequiredMixin, ListView):
+    template_name = 'design/custom_applications.html'
+    context_object_name = 'applications_list'
+
+    def get_queryset(self):
+        return Application.objects.filter(app_publisher=self.request.user).order_by('-app_date_created')

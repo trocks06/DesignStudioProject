@@ -1,0 +1,21 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Мои заявки</title>{% endblock %}
+{% block content %}
+    {% if applications_list %}
+        <h1>Ваши заявки</h1>
+        <ul>
+            {% for application in applications_list %}
+                <ul>
+                    <li>Временная метка: {{ application.app_date_created }}</li>
+                    <li>Название заявки: {{ application.app_name }}</li>
+                    <li>Описание заявки: {{ application.app_description }}</li>
+                    <li>Категория заявки: {{ application.app_category }}</li>
+                    <li>Статус заявки: {{ application.get_status_display }}</li>
+                    <li><a type="button" href="{% url 'detail_application' application.id %}">Открыть заявку</a></li>
+                </ul>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <h1>Нет созданных заявок</h1>
+    {% endif %}
+{% endblock %}

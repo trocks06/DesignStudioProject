@@ -14,4 +14,5 @@ urlpatterns = [
     path('application/create', views.create_application, name='create_application'),
     path('application/<int:pk>/', views.ApplicationDetail.as_view(), name='detail_application'),
     path('application/<int:pk>/delete/', views.delete_application, name='delete_application'),
+    path('custom_applications/', views.CustomApplicationsView.as_view(), name='custom_applications'),
 ]
