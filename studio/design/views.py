@@ -1,9 +1,8 @@
-from lib2to3.fixes.fix_input import context
-
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView, LoginView
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
@@ -125,6 +124,9 @@ class ApplicationDetail(LoginRequiredMixin, DetailView):
 
 def delete_application(request, pk):
     app = get_object_or_404(Application, pk=pk)
+    if app.status in ['a', 'd']:
+        messages.error(request, 'Нельзя удалить заявку с текущим статусом.')
+        return redirect('index')
     if request.method == 'POST':
         app.delete()
         return redirect('index')

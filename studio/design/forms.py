@@ -48,6 +48,7 @@ class UserRegisterForm(UserCreationForm):
     patronymic = forms.CharField(validators=[kiril_validator])
     email = forms.EmailField(validators=[EmailValidator()])
 
+
     class Meta:
         model = AdvUser
         fields = ['username', 'first_name', 'last_name', 'patronymic', 'email', 'password1', 'password2', 'agree_to_terms']
