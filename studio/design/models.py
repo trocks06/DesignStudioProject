@@ -25,12 +25,12 @@ class Application(models.Model):
     app_publisher = models.ForeignKey(AdvUser, on_delete=models.SET_NULL, blank=False, null=True, related_name='applications_published')
 
     design_image = models.ImageField(upload_to='design_images/', null=True, blank=True)
-    design_publisher = models.ForeignKey(AdvUser, on_delete=models.SET_NULL, null=True, blank=False, related_name='applications_designs')
+    design_publisher = models.ForeignKey(AdvUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='applications_designs')
 
     APP_STATUS = (
-        ('n', 'New'),
-        ('a', 'Accepted in work'),
-        ('d', 'Done'),
+        ('n', 'Новая'),
+        ('a', 'Принято в работу'),
+        ('d', 'Выполнено'),
     )
     status = models.CharField(max_length=1, choices=APP_STATUS, blank=False, default='n')
     comment = models.TextField(blank=True)

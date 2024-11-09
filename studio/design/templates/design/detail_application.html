@@ -1,0 +1,24 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>{{ application.app_name }}</title>{% endblock %}
+{% block content %}
+    <h2>Название: {{ application.app_name }}</h2>
+    <p>Описание: {{ application.app_description }}</p>
+    <p>Категория заявки: {{ application.app_category }}</p>
+    <p>Дата создания заявки: {{ application.app_date_created }}</p>
+    <p>Фото помещения: <img src="{{ application.app_image.url }}" alt="image"> </p>
+    <p>Создатель заявки: {{ application.app_publisher }}</p>
+    <p>Статус: {{ application.get_status_display }}</p>
+    <p>Комментарий: {{ application.comment }}</p>
+    {% if application.design_image %}
+        <p>Дизайн помещения: {{ application.design_image }}</p>
+        <p>Выполнил:{{ application.design_publisher }}</p>
+    {% else %}
+        <p>Изображение отсутствует</p>
+    {% endif %}
+    {% if application.design_publisher %}
+        <p>Выполнил:{{ application.design_publisher }}</p>
+    {% else %}
+        <p>Дизайнер не указан</p>
+    {% endif %}
+    <a type="button" href="{% url 'delete_application' application.id %}">Удалить заявку</a>
+{% endblock %}

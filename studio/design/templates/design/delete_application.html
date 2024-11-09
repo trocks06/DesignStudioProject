@@ -1,0 +1,9 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Удаление заявки</title>{% endblock %}
+{% block content %}
+    <h1>Вы действительно хотите удалить заявку?</h1>
+    <form action="{% url 'delete_application' app.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Удалить</button>
+    </form>
+{% endblock %}

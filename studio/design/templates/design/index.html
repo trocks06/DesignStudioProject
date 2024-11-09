@@ -1,5 +1,24 @@
 {% extends 'design/base.html' %}
 {% block title %}<title>Главная</title>{% endblock %}
 {% block content %}
-    <h1>Это Главная страница</h1>
+    {% if user.is_authenticated %}
+        {% if applications_list %}
+            <h1>Выполненные заявки</h1>
+            <ul>
+                {% for application in applications_list %}
+                    <ul>
+                        <li>Временная метка: {{ application.app_date_created }}</li>
+                        <li>Название: {{ application.app_name }}</li>
+                        <li>Категория заявки: {{ application.app_category }}</li>
+                        <li>Фотография: <img src="{{ application.app_image.url }}" alt="image"></li>
+                        <li><a type="button" href="{% url 'detail_application' application.id %}">Открыть заявку</a></li>
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h1>Нет выполненных заявок</h1>
+        {% endif %}
+    {% else %}
+        <h1>Для простотра контента, авторизируйтесь</h1>
+    {% endif %}
 {% endblock %}

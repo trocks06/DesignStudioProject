@@ -1,0 +1,10 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Удаление профиля</title>{% endblock %}
+{% block content %}
+    <h1>Вы действительно хотите удалить профиль?</h1>
+    <form action="{% url 'delete_profile' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Удалить</button>
+    </form>
+{% endblock %}

@@ -8,6 +8,7 @@
 </head>
 <body>
     <header>
+        <a href="{% url 'index' %}">Главная</a>
         {% block header %}
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}">Выйти</a>
@@ -15,7 +16,6 @@
                 <a href="#">Мои заявки</a>
                 <a href="{% url 'profile' %}">Личный кабинет</a>
             {% else %}
-                <a href="{% url 'index' %}">Главная</a>
                 <a href="{% url 'login' %}">Вход</a>
                 <a href="{% url 'register' %}">Регистрация</a>
             {% endif %}

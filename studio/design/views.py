@@ -2,15 +2,22 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
-from django.shortcuts import render, redirect
-from django.contrib import auth, messages
+from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import auth
 from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView
 
 from .forms import UserLoginForm, UserRegisterForm, UserEditForm, ApplicationCreateForm
+from .models import Application
 
 
-def index(request):
-    return render(request, 'design/index.html')
+class IndexView(ListView):
+    template_name = 'design/index.html'
+    context_object_name = 'applications_list'
+
+    def get_queryset(self):
+        return Application.objects.filter(status='d').order_by('-app_date_created')[:4]
 
 def login(request):
     if request.method == 'POST':
@@ -21,7 +28,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                return redirect('index')
+                return redirect('profile')
     else:
         form = UserLoginForm()
     context = {'form': form}
@@ -83,6 +90,7 @@ class PasswordChange(LoginRequiredMixin, PasswordChangeView):
         update_session_auth_hash(self.request, user)
         return super().form_valid(form)
 
+@login_required
 def create_application(request):
     if request.method == 'POST':
         form = ApplicationCreateForm(data=request.POST, files=request.FILES)
@@ -95,3 +103,22 @@ def create_application(request):
         form = ApplicationCreateForm()
     context = {'form': form}
     return render(request, 'design/create_application.html', context)
+
+class ApplicationDetail(LoginRequiredMixin, DetailView):
+    model = Application
+    template_name = 'design/detail_application.html'
+    context_object_name = 'application'
+
+    def get_object(self, queryset=None):
+        application = super().get_object(queryset)
+        if not application:
+            raise Http404('Заявка недоступна')
+        return application
+
+def delete_application(request, pk):
+    app = get_object_or_404(Application, pk=pk)
+    if request.method == 'POST':
+        app.delete()
+        return redirect('index')
+    else:
+        return render(request, 'design/delete_application.html', {'app': app})
