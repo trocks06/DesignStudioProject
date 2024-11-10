@@ -12,8 +12,14 @@
         {% block header %}
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}">Выйти</a>
-                <a href="{% url 'create_application' %}">Создать заявку</a>
-                <a href="{% url 'custom_applications' %}">Мои заявки</a>
+                {% if not user.is_employer and not user.is_superuser %}
+                    <a href="{% url 'create_application' %}">Создать заявку</a>
+                {% endif %}
+                {% if user.is_employer or user.is_superuser %}
+                    <a href="{% url 'all_applications' %}">Все заявки</a>
+                {% else %}
+                    <a href="{% url 'custom_applications' %}">Мои заявки</a>
+                {% endif %}
                 <a href="{% url 'profile' %}">Личный кабинет</a>
             {% else %}
                 <a href="{% url 'login' %}">Вход</a>

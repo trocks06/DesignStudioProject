@@ -10,6 +10,6 @@
         <li><strong>Дата регистрации:</strong> {{ user.date_joined }}</li>
         <li><strong>Последнее изменение:</strong> {{ user.last_login }}</li>
     </ul>
-    <a type="button" href="{% url 'edit_profile' %}">Редактировать профиль</a>
-    <a type="button" href="{% url 'delete_profile' %}">Удалить профиль</a>
+    <a  href="{% url 'edit_profile' %}">Редактировать профиль</a>
+    <a  href="{% url 'delete_profile' %}">Удалить профиль</a>
 {% endblock %}

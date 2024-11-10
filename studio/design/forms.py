@@ -51,7 +51,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = AdvUser
-        fields = ['username', 'first_name', 'last_name', 'patronymic', 'email', 'password1', 'password2', 'agree_to_terms']
+        fields = ['username', 'first_name', 'last_name', 'patronymic', 'email', 'password1', 'password2', 'agree_to_terms', 'is_employer']
 
 class UserEditForm(UserChangeForm):
     latin_validator = RegexValidator(
@@ -103,3 +103,21 @@ class ApplicationCreateForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ['app_name', 'app_description', 'app_category', 'app_image']
+
+class ApplicationEditForm(forms.ModelForm):
+    def clean_app_image(self):
+        design_image = self.cleaned_data.get('design_image')
+        format_validator = ['JPEG', 'JPG', 'PNG', 'BMP']
+        if design_image:
+            try:
+                img = Image.open(design_image)
+                img_format = img.format
+                if img_format.upper() not in format_validator:
+                    raise forms.ValidationError('Неверный формат файла. Допустимые форматы: JPEG, JPG, PNG, BMP.')
+            except Exception:
+                raise forms.ValidationError('Не удалось открыть файл как изображение')
+        return design_image
+
+    class Meta:
+        model = Application
+        fields = ['design_image']

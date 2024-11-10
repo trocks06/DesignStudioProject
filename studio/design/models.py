@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class AdvUser(AbstractUser):
     patronymic = models.CharField(max_length=50, blank=True)
+    is_employer = models.BooleanField(default=False, verbose_name='Статус сотрудника')
 
     def __str__(self):
         return self.username

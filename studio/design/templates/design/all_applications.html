@@ -1,8 +1,8 @@
 {% extends 'design/base.html' %}
-{% block title %}<title>Мои заявки</title>{% endblock %}
+{% block title %}<title>Все заявки</title>{% endblock %}
 {% block content %}
-    <h1>Ваши заявки</h1>
-    <form action="{% url 'custom_applications' %}" method="GET">
+    <h1>Все заявки</h1>
+    <form action="{% url 'all_applications' %}" method="GET">
         <select name="status">
             <option value="">Все</option>
             <option value="n">Новые</option>

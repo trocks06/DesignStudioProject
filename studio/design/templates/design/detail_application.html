@@ -10,8 +10,7 @@
     <p>Статус: {{ application.get_status_display }}</p>
     <p>Комментарий: {{ application.comment }}</p>
     {% if application.design_image %}
-        <p>Дизайн помещения: {{ application.design_image }}</p>
-        <p>Выполнил:{{ application.design_publisher }}</p>
+        <p>Дизайн помещения: <img src="{{ application.design_image.url }}" alt="image"> </p>
     {% else %}
         <p>Изображение отсутствует</p>
     {% endif %}
@@ -21,4 +20,14 @@
         <p>Дизайнер не указан</p>
     {% endif %}
     <a type="button" href="{% url 'delete_application' application.id %}">Удалить заявку</a>
+    {% if user.is_employer %}
+        <a type="button" href="{% url 'design_application' application.id %}">Предложить дизайн</a>
+    {% endif %}
+    {% if messages %}
+       <ul class="messages">
+           {% for message in messages %}
+               <li>{{ message }}</li>
+           {% endfor %}
+       </ul>
+   {% endif %}
 {% endblock %}
