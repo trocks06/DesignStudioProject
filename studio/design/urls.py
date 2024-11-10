@@ -17,4 +17,8 @@ urlpatterns = [
     path('applications/custom', views.CustomApplicationsView.as_view(), name='custom_applications'),
     path('applications/all', views.AllApplicationsView.as_view(), name='all_applications'),
     path('application/<int:pk>/edit/design/', views.design_application, name='design_application'),
+    path('application/<int:pk>/edit/status/', views.status_application, name='status_application'),
+    path('categories/', views.categories, name='categories'),
+    path('category/create/', views.create_category, name='create_category'),
+    path('category/<int:pk>/delete/', views.delete_category, name='delete_category'),
 ]

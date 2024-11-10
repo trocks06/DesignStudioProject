@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.core.validators import RegexValidator, EmailValidator
 
-from .models import AdvUser, Application
+from .models import AdvUser, Application, Category
 
 
 class UserLoginForm(AuthenticationForm):
@@ -121,3 +121,19 @@ class ApplicationEditForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ['design_image']
+
+class ApplicationEditStatusForm(forms.ModelForm):
+    def clean_comment(self):
+        comment = self.cleaned_data.get('comment')
+        status = self.cleaned_data.get('status')
+        if not comment and status == 'a':
+            raise forms.ValidationError('Требуется ввести комментарий')
+
+    class Meta:
+        model = Application
+        fields = ['status', 'comment']
+
+class CategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['category_name']

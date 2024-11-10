@@ -1,9 +1,9 @@
 {% extends 'design/base.html' %}
-{% block title %}<title>Добавление дизайна</title>{% endblock %}
+{% block title %}<title>Изменение статуса</title>{% endblock %}
 {% block content %}
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Предложить</button>
+        <button type="submit">Изменить статус</button>
     </form>
 {% endblock %}

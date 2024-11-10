@@ -9,7 +9,7 @@ class AdvUser(AbstractUser):
         return self.username
 
 class Category(models.Model):
-    category_name = models.CharField(max_length=100, blank=False, unique=True)
+    category_name = models.CharField(max_length=100, blank=False, unique=True, verbose_name='Название категории')
     def __str__(self):
         return self.category_name
 
@@ -34,7 +34,7 @@ class Application(models.Model):
         ('d', 'Выполнено'),
     )
     status = models.CharField(max_length=1, choices=APP_STATUS, blank=False, default='n')
-    comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Заявку'

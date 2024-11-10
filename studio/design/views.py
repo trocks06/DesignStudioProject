@@ -10,8 +10,10 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView
 
-from .forms import UserLoginForm, UserRegisterForm, UserEditForm, ApplicationCreateForm, ApplicationEditForm
-from .models import Application
+from .forms import UserLoginForm, UserRegisterForm, UserEditForm, ApplicationCreateForm, ApplicationEditForm, \
+    ApplicationEditStatusForm, CategoryCreateForm
+from .models import Application, Category
+
 
 def is_employer(user):
     return user.is_employer
@@ -109,7 +111,7 @@ class PasswordChange(LoginRequiredMixin, PasswordChangeView):
         return super().form_valid(form)
 
 @login_required
-@method_decorator(user_passes_test(is_user), name='dispatch')
+@user_passes_test(is_user)
 def create_application(request):
     if request.method == 'POST':
         form = ApplicationCreateForm(data=request.POST, files=request.FILES)
@@ -117,7 +119,7 @@ def create_application(request):
             application = form.save(commit=False)
             application.app_publisher = request.user
             application.save()
-            return redirect('index')
+            return redirect('custom_applications')
     else:
         form = ApplicationCreateForm()
     context = {'form': form}
@@ -135,6 +137,7 @@ class ApplicationDetail(LoginRequiredMixin, DetailView):
         return application
 
 @login_required
+@user_passes_test(is_user)
 def delete_application(request, pk):
     app = get_object_or_404(Application, pk=pk)
     user = request.user.username
@@ -194,3 +197,50 @@ def design_application(request, pk):
         form = ApplicationEditForm()
     context = {'form': form}
     return render(request, 'design/design_application.html', context)
+
+@login_required
+@user_passes_test(is_superuser)
+def status_application(request, pk):
+    application = get_object_or_404(Application, pk=pk)
+    if not application.design_image:
+        messages.error(request, 'Нельзя изменить статус без прикрепленного дизайна.')
+        return redirect('detail_application', pk)
+    if application.status in ['a', 'd']:
+        messages.error(request, 'Нельзя изменить статус с текущего.')
+        return redirect('detail_application', pk)
+    if request.method == 'POST':
+        form = ApplicationEditStatusForm(data=request.POST, files=request.FILES, instance=application)
+        if form.is_valid():
+            form.save()
+            return redirect('detail_application', pk)
+    else:
+        form = ApplicationEditStatusForm()
+    context = {'form': form}
+    return render(request, 'design/status_application.html', context)
+
+@login_required
+@user_passes_test(is_superuser)
+def categories(request):
+    categories = Category.objects.all()
+    context = {'category_list': categories}
+    return render(request, 'design/categories.html', context)
+
+@login_required
+@user_passes_test(is_superuser)
+def create_category(request):
+    if request.method == 'POST':
+        form = CategoryCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('categories')
+    else:
+        form = CategoryCreateForm()
+    context = {'form': form}
+    return render(request, 'design/create_category.html', context)
+
+@login_required
+@user_passes_test(is_superuser)
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    return redirect('categories')

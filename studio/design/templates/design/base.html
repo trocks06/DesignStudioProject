@@ -20,6 +20,9 @@
                 {% else %}
                     <a href="{% url 'custom_applications' %}">Мои заявки</a>
                 {% endif %}
+                {% if user.is_superuser %}
+                    <a href="{% url 'categories' %}">Категории</a>
+                {% endif %}
                 <a href="{% url 'profile' %}">Личный кабинет</a>
             {% else %}
                 <a href="{% url 'login' %}">Вход</a>

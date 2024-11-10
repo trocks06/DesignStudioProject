@@ -1,0 +1,10 @@
+{% extends 'design/base.html' %}
+{% block title %}<title>Удаление категории</title>{% endblock %}
+{% block content %}
+    <h1>Вы действительно хотите удалить эту категорию?</h1>
+    <form action="{% url 'delete_category' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Удалить</button>
+    </form>
+{% endblock %}
